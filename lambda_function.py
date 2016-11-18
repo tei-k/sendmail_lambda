@@ -26,6 +26,7 @@ ID : {0[id]}
 OS,及びバージョン : {0[os]}
 問題発生した日時 : {0[date]}
 問い合わせの種類 : {0[kind]}
+評価 : {0[evaluation]}
 お問い合わせ内容 :
 ============================
 {0[message]}
@@ -45,15 +46,18 @@ def send_mail(mail_body, args):
     return str(response.status_code)
 
 def lambda_handler(event, context):
-    args = {'id': event['id'],
-            'name': event['name'],
-            'email': event['email'],
-            'date': event['happenDate'],
-            'kind': event['kind'],
-            'machine': event['machine'],
-            'os': event['os'],
-            'appver': event['appver'],
-            'message':event['message']}
+    args = {'id': event.get('id', ''),
+            'name': event.get('name', ''),
+            'email': event.get('email', ''),
+            'date': event.get('happenDate', ''),
+            'kind': event.get('kind', ''),
+            'machine': event.get('machine', ''),
+            'os': event.get('os', ''),
+            'appver': event.get('appver', ''),
+            'evaluation': event.get('other-evaluation', ''),
+            'message':event.get('message', '')
+#            'stage': context.invoked_function_arn.rsplit(':', 1)[1]
+           }
 
     mail_body = make_body(args)
     result = send_mail(mail_body, args)
