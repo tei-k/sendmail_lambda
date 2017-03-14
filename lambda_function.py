@@ -59,6 +59,9 @@ def lambda_handler(event, context):
 #            'stage': context.invoked_function_arn.rsplit(':', 1)[1]
            }
 
+    if args['id'] == '' or args['name'] == '' or args['email'] == '':
+        return {'result': 'bad request'} 
+
     mail_body = make_body(args)
     result = send_mail(mail_body, args)
 
